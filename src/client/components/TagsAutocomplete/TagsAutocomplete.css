@@ -1,0 +1,30 @@
+.autocomplete {
+  position: relative;
+}
+
+.autocompleteInput {
+  composes: input from '../../GlobalStyle.css';
+}
+
+.autocompleteList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #111111;
+  border-top: none;
+  background: #ffffff;
+  list-style: none;
+}
+
+.listItem {
+  padding: 10px 15px;
+}
+
+.listItem_active {
+  composes: listItem;
+  background: #f7f7f7;
+}

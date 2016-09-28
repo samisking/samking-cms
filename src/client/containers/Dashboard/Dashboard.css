@@ -1,0 +1,33 @@
+.app {
+  padding-top: 10vh;
+}
+
+.nav {
+  position: fixed;
+  top: 10vh;
+  width: 20vw;
+  padding: 40px;
+}
+
+.navItem {
+  margin-bottom: 40px;
+}
+
+.navLink {
+  color: #ffffff;
+  text-decoration: none;
+  opacity: 0.4;
+}
+
+.navLink:hover,
+.navLink_active {
+  opacity: 1;
+}
+
+.page {
+  background: #ffffff;
+  min-height: 90vh;
+  margin-left: 20vw;
+  padding: 80px;
+  overflow: hidden;
+}

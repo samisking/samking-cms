@@ -1,0 +1,67 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form {
+  width: calc(100% - 80px - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  composes: input from '../../GlobalStyle.css';
+  margin-bottom: 20px;
+}
+
+.textarea {
+  composes: input;
+  display: block;
+  resize: none;
+  width: 100%;
+}
+
+.content {
+  composes: textarea;
+  font-family: Menlo, monospace;
+  font-size: 0.85em;
+  flex: 1;
+}
+
+.images {
+  width: 300px;
+}
+
+.fileInput {
+  width: 100%;
+  background: #f7f7f7;
+  padding: 20px;
+  margin-bottom: 20px;
+  font-size: 1em;
+  outline: none;
+
+  &:hover {
+    background: #eeeeee;
+    cursor: pointer;
+  }
+}
+
+.imagePreviews {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.imagePreview {
+  width: calc(50% - 10px);
+  margin-bottom: 20px;
+}
+
+.imagePreview_new {
+  composes: imagePreview;
+  opacity: 0.3;
+}
+
+.imageName {
+  margin: 10px 0 0;
+}

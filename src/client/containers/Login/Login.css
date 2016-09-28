@@ -1,0 +1,21 @@
+.wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  background: #FFFFFF;
+  padding: 80px;
+  max-width: 400px;
+  text-align: center;
+}
+
+.input {
+  composes: input from '../../GlobalStyle.css';
+  margin-bottom: 20px;
+}

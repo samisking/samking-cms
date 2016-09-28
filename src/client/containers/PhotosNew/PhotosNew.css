@@ -1,0 +1,67 @@
+.fileInput {
+  width: 100%;
+  background: #f7f7f7;
+  padding: 20px;
+  font-size: 1em;
+  outline: none;
+
+  &:hover {
+    background: #eeeeee;
+    cursor: pointer;
+  }
+}
+
+.errorText {
+  margin: 20px 0 0;
+  color: #ff0000;
+}
+
+.previews {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.previewContainer {
+  /*width: calc(50% - 30px);*/
+  width: 100%;
+  margin-top: 40px;
+}
+
+.preview {
+  display: flex;
+  justify-content: space-between;
+}
+
+.previewName {
+  margin: 0 0 10px;
+}
+
+.previewImage,
+.previewData {
+  width: calc(50% - 10px);
+}
+
+.previewData {
+  display: flex;
+  flex-direction: column;
+}
+
+.previewCaption {
+  composes: input from '../../GlobalStyle.css';
+  align-items: flex-start;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.previewTagsAutocomplete {
+  margin-bottom: 5px;
+}
+
+.previewTags {
+  composes: input from '../../GlobalStyle.css';
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+}

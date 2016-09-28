@@ -1,0 +1,25 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "comma-dangle": 0,
+    "global-require": 0,
+    "no-alert": 0,
+    "no-console": 0,
+    "no-underscore-dangle": 0,
+    "react/jsx-sort-props": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/prefer-default-export": 0,
+    "generator-star-spacing": 0
+  },
+  "plugins": [
+    "react", "import"
+  ],
+  "parser": "babel-eslint",
+  "globals": {
+    "expect": true,
+    "shallow": true
+  }
+}

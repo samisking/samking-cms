@@ -1,0 +1,13 @@
+.tag {
+  display: inline-block;
+  margin: 0 10px 10px 0;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #f7f7f7;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #111;
+    color: #fff;
+  }
+}

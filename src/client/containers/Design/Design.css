@@ -1,0 +1,48 @@
+.grid {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  &:after {
+    content: '';
+    display: block;
+    width: calc(33.333% - (40px * 2 / 3));
+  }
+}
+
+.gridItem {
+  /* (100% / columns) - ((gutter * (columns - 1)) / columns ) */
+  width: calc((100% / 3) - (40px * 2 / 3));
+  margin-bottom: 40px;
+  display: flex;
+}
+
+.addNewContainer {
+  composes: gridItem;
+}
+
+.addNewButton {
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  background: #f7f7f7;
+  position: relative;
+  color: #888888;
+  transition: color 150ms ease, background 150ms ease;
+
+  &:hover {
+    background: #111111;
+    color: #ffffff;
+  }
+}
+
+.addNewContent {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

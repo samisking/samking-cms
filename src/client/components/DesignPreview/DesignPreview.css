@@ -1,0 +1,58 @@
+.link {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px;
+  background: #f7f7f7;
+  text-decoration: none;
+  color: #333333;
+
+  &:hover {
+    background: #111111;
+    color: #ffffff;
+  }
+}
+
+.text {
+  margin: 0;
+}
+
+.title {
+  composes: text;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.date {
+  composes: text;
+  margin-top: 10px;
+}
+
+.excerpt {
+  composes: text;
+  margin-top: 20px;
+}
+
+.cta {
+  composes: text;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 14px;
+  color: #AAAAAA;
+
+  &:hover {
+    color: #ffffff;
+  }
+
+  &:after {
+    content: '→';
+    display: inline-block;
+    margin-left: 5px;
+    transition: margin 150ms ease;
+  }
+
+  &:hover:after {
+    margin-left: 10px;
+  }
+}
