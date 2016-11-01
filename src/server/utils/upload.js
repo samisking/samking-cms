@@ -1,5 +1,5 @@
 /* eslint no-param-reassign: "off" */
-import marked from 'marked-ast';
+import { defaultBlockParse as parseMarkdown } from 'simple-markdown';
 import * as utils from './images';
 
 export const uploadPhotos = async (files, body) => {
@@ -110,7 +110,7 @@ export const uploadProject = async (files, body) => {
     }
   }
 
-  const markdown = marked.parse(body.raw);
+  const markdown = parseMarkdown(body.raw);
 
   const project = {
     content: markdown,
