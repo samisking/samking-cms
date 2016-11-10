@@ -1,4 +1,4 @@
-import { postJSON } from 'sk-fetch-wrapper';
+import { postJSON } from 'sk-fetch-wrapper/lib/json';
 import * as types from './actionTypes';
 
 export const login = ({ username, password }) => (dispatch) => {
@@ -36,19 +36,25 @@ export const verifyToken = (token) => (dispatch) => {
     type: types.TOKEN_VERIFY_REQUEST
   });
 
-  return postJSON('/verify-login', { token })
+  return postJSON('/verify-login', {}, { headers: { Authorization: token } })
     .then(res => {
       dispatch({
         type: types.TOKEN_VERIFY_SUCCESS,
         token: res.token
       });
+
+      // Return the auth state so we can use this action in a promise
+      return true;
     })
     .catch(err => {
-      dispatch(logout());
-
       dispatch({
         type: types.TOKEN_VERIFY_FAILURE,
         error: err
       });
+
+      dispatch(logout());
+
+      // Return the auth state so we can use this action in a promise
+      return false;
     });
 };

@@ -6,20 +6,25 @@ import '../../GlobalStyle.css';
 
 class Root extends Component {
   componentWillMount() {
-    const { dispatch, loggedIn } = this.props;
-    const token = localStorage.getItem('token');
+    const { dispatch } = this.props;
+    const token = localStorage.getItem('token'); // eslint-disable-line no-undef
 
-    // If there's a token
-    if (token && !loggedIn) {
-      // Attempt to verify it
-      dispatch(actions.verifyToken(token));
+    // If a token exists then verify it
+    if (token) {
+      dispatch(actions.verifyToken(token)).then(isAuthed => {
+        if (!isAuthed) {
+          // If auth failed, redirect back to login
+          this.props.router.push('/login');
+        }
+      });
     } else {
-      // Redirect back to login
+      // Redirect back to login if no token
       this.props.router.push('/login');
     }
   }
 
   componentWillReceiveProps(newProps) {
+    console.log(newProps);
     if (this.props.loggedIn && !newProps.loggedIn) {
       // If the user has logged out, or there was a verify error, go back to login
       this.props.router.push('/login');

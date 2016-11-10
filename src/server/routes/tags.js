@@ -1,14 +1,21 @@
 /* eslint no-param-reassign: "off" */
-import { postJSON } from 'sk-fetch-wrapper';
-import config from '../../config';
+import { GraphClient, makeHeaders } from '../services/api';
 
-export const createTag = async (ctx) => {
-  const { token } = ctx.state;
-  const data = ctx.request.body;
+export const createTag = async ctx => {
+  const API_TOKEN = ctx.state.API_TOKEN;
+  const headers = makeHeaders(API_TOKEN);
+  const tag = ctx.request.body;
 
   try {
-    await postJSON(`${config.API_URL}/api/tags`, { data, token });
-    ctx.body = { message: 'Created tag successfully.', data };
+    const variables = { tag };
+    const query = `{
+      mutation ($photo: Tag) {
+        createTag(tag: $tag) { id }
+      }
+    }`;
+
+    const created = await GraphClient.mutation(query, variables, headers);
+    ctx.body = { message: 'Updated photo successfully.', data: created };
     ctx.status = 201;
   } catch (err) {
     ctx.throw(err.message, err.status);

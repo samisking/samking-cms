@@ -2,7 +2,6 @@ import Koa from 'koa';
 import compress from 'koa-compress';
 import serve from 'koa-static';
 import convert from 'koa-convert';
-import mount from 'koa-mount';
 import chalk from 'chalk';
 import path from 'path';
 import webpack from 'webpack';
@@ -31,8 +30,6 @@ if (config.debug) {
   })));
 
   app.use(convert(webpackHotMiddleware(compiler)));
-
-  app.use(convert(mount('/images', serve(path.resolve(__dirname, '../../images')))));
 } else {
   app.use(convert(serve(path.resolve(__dirname, '../../build'))));
 }

@@ -14,13 +14,19 @@ s3.listBuckets((err, data) => {
   if (!hasBucket) s3.createBucket({ Bucket: bucket }, () => {});
 });
 
-export const uploadFile = (name, src) =>
-  new Promise((resolve, reject) => {
-    fs.readFile(src, (readErr, data) => {
-      if (readErr) reject(new Error('Reading image from temp dir.'));
+const S3Service = {
+  uploadFile: (name, src) =>
+    new Promise((resolve, reject) => {
+      fs.readFile(src, (readErr, data) => {
+        if (readErr) {
+          reject(new Error('Reading image from temp dir.'));
+        }
 
-      s3.upload({ Bucket: bucket, Key: name, Body: data }, () => {
-        resolve(`${AWSConfig.endpoint}/${bucket}/${name}`);
+        s3.upload({ Bucket: bucket, Key: name, Body: data }, () => {
+          resolve(`${AWSConfig.endpoint}/${bucket}/${name}`);
+        });
       });
-    });
-  });
+    })
+};
+
+export default S3Service;

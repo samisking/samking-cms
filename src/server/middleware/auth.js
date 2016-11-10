@@ -1,41 +1,30 @@
 /* eslint no-param-reassign: "off" */
-import { postJSON } from 'sk-fetch-wrapper';
+import AuthService from '../services/auth';
 import config from '../../config';
 
-let API_TOKEN = null;
+const authMiddleware = async (ctx, next) => {
+  const token = ctx.headers.authorization;
 
-export const apiAuthMiddleware = async (ctx, next) => {
-  // If there's a token already, then verify it
-  if (API_TOKEN) {
-    try {
-      const res = await postJSON(`${config.API_URL}/api/authenticate`, {
-        token: API_TOKEN
-      });
-
-      API_TOKEN = res.token;
-      ctx.state.token = res.token;
-      await next();
-      return;
-    } catch (err) {
-      ctx.throw(err.message, err.status);
-      return;
-    }
+  if (config.SKIP_AUTH) {
+    ctx.state.isAuthed = true;
   } else {
-    // If no token exists, then try to get a new one
     try {
-      const res = await postJSON(`${config.API_URL}/api/login`, {
-        username: config.API_USER_NAME,
-        password: config.API_USER_PASS
-      });
-
-      API_TOKEN = res.token;
-      ctx.state.token = API_TOKEN;
-      await next();
-      return;
-    } catch (err) {
-      API_TOKEN = null;
-      ctx.throw(err.message, err.status);
-      return;
+      await AuthService.verifyToken(token);
+      ctx.state.isAuthed = true;
+    } catch (error) {
+      ctx.state.isAuthed = false;
     }
   }
+
+  return await next();
 };
+
+export const authRequired = async (ctx, next) => {
+  if (!ctx.state.isAuthed) {
+    ctx.throw('Authorization is required for this request.');
+  }
+
+  return await next();
+};
+
+export default authMiddleware;

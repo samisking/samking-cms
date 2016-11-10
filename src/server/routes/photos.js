@@ -1,47 +1,71 @@
 /* eslint no-param-reassign: "off" */
-import { postJSON, putJSON, deleteJSON } from 'sk-fetch-wrapper';
-import config from '../../config';
-import { uploadPhotos } from '../utils/upload';
+import { GraphClient, makeHeaders } from '../services/api';
+import PublishService from '../services/publish';
 
-export const createPhotos = async (ctx) => {
-  const token = ctx.state.token;
+export const createPhotos = async ctx => {
+  const API_TOKEN = ctx.state.API_TOKEN;
+  const headers = makeHeaders(API_TOKEN);
+  const { files, body } = ctx.req;
 
   try {
-    const data = await uploadPhotos(ctx.req.files, ctx.req.body);
+    const photos = await PublishService.publishPhotosPhotos(files, body);
 
-    for (const photo of data) {
-      await postJSON(`${config.API_URL}/api/photos`, { data: photo, token });
-    }
+    const postAllPhotos = photos.map(photo => {
+      const variables = { photo };
+      const query = `{
+        mutation ($photo: Photo) {
+          createPhoto(photo: $photo) { id }
+        }
+      }`;
 
-    ctx.body = { message: 'Created photo(s) successfully.', data };
+      return GraphClient.mutation(query, variables, headers);
+    });
+
+    const created = await Promise.all(postAllPhotos);
+    ctx.body = { message: 'Created photo(s) successfully.', data: created };
     ctx.status = 201;
   } catch (err) {
     ctx.throw(err.message, err.status);
   }
 };
 
-export const updatePhoto = async (ctx) => {
-  const token = ctx.state.token;
-  const data = ctx.request.body;
-  const { id } = ctx.params;
+export const updatePhoto = async ctx => {
+  const API_TOKEN = ctx.state.API_TOKEN;
+  const headers = makeHeaders(API_TOKEN);
+  const photo = ctx.request.body;
+  const id = parseInt(ctx.params.id, 10);
 
   try {
-    // Try and update the photo with the new data
-    await putJSON(`${config.API_URL}/api/photos/${id}`, { data, token });
-    ctx.body = { message: 'Updated photo successfully.', data };
+    const variables = { id, photo };
+    const query = `{
+      mutation ($id: Int, $photo: Photo) {
+        updatePhoto(id: $id, photo: $photo) { id }
+      }
+    }`;
+
+    const updated = await GraphClient.mutation(query, variables, headers);
+    ctx.body = { message: 'Updated photo successfully.', data: updated };
     ctx.status = 201;
   } catch (err) {
     ctx.throw(err.message, err.status);
   }
 };
 
-export const deletePhoto = async (ctx) => {
-  const token = ctx.state.token;
-  const { photo: data } = ctx.request.body;
+export const deletePhoto = async ctx => {
+  const API_TOKEN = ctx.state.API_TOKEN;
+  const headers = makeHeaders(API_TOKEN);
+  const id = parseInt(ctx.params.id, 10);
 
   try {
-    await deleteJSON(`${config.API_URL}/api/photos/${data.id}`, { token });
-    ctx.body = { message: 'Deleted photo successfully.', data };
+    const variables = { id };
+    const query = `{
+      mutation ($id: Int) {
+        deletePhoto(id: $id) { id }
+      }
+    }`;
+
+    const deleted = await GraphClient.mutation(query, variables, headers);
+    ctx.body = { message: 'Deleted photo successfully.', data: deleted };
     ctx.status = 200;
   } catch (err) {
     ctx.throw(err.message, err.status);
