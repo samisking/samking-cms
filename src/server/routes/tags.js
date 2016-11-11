@@ -1,5 +1,5 @@
 /* eslint no-param-reassign: "off" */
-import { APIClient } from '../services/api';
+import APIService from '../services/api';
 
 export const createTag = async ctx => {
   const API_TOKEN = ctx.state.API_TOKEN;
@@ -12,7 +12,7 @@ export const createTag = async ctx => {
       createTag(tag: $tag) { id }
     }`;
 
-    const created = await APIClient.mutation(query, variables, { headers });
+    const created = await APIService.client.mutation(query, variables, { headers });
     ctx.body = { message: 'Updated photo successfully.', data: created };
     ctx.status = 201;
   } catch (err) {

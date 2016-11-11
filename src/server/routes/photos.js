@@ -1,5 +1,5 @@
 /* eslint no-param-reassign: "off" */
-import { APIClient } from '../services/api';
+import APIService from '../services/api';
 import PublishService from '../services/publish';
 
 export const createPhotos = async ctx => {
@@ -16,7 +16,7 @@ export const createPhotos = async ctx => {
         createPhoto(photo: $photo) { id }
       }`;
 
-      return APIClient.mutation(query, variables, { headers });
+      return APIService.client.mutation(query, variables, { headers });
     });
 
     const created = await Promise.all(postAllPhotos);
@@ -39,7 +39,7 @@ export const updatePhoto = async ctx => {
       updatePhoto(id: $id, photo: $photo) { id }
     }`;
 
-    const updated = await APIClient.mutation(query, variables, { headers });
+    const updated = await APIService.client.mutation(query, variables, { headers });
     ctx.body = { message: 'Updated photo successfully.', data: updated };
     ctx.status = 201;
   } catch (err) {
@@ -58,7 +58,7 @@ export const deletePhoto = async ctx => {
       deletePhoto(id: $id) { id }
     }`;
 
-    const deleted = await APIClient.mutation(query, variables, { headers });
+    const deleted = await APIService.client.mutation(query, variables, { headers });
     ctx.body = { message: 'Deleted photo successfully.', data: deleted };
     ctx.status = 200;
   } catch (err) {

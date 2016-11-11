@@ -1,5 +1,5 @@
 /* eslint no-param-reassign: "off" */
-import { APIClient } from '../services/api';
+import APIService from '../services/api';
 import PublishService from '../services/publish';
 
 export const createProject = async ctx => {
@@ -15,7 +15,7 @@ export const createProject = async ctx => {
       createDesignProject(project: $project) { id }
     }`;
 
-    const created = await APIClient.mutation(query, variables, { headers });
+    const created = await APIService.client.mutation(query, variables, { headers });
     ctx.body = { message: 'Created project successfully.', data: created };
     ctx.status = 201;
   } catch (err) {
@@ -37,7 +37,7 @@ export const updateProject = async ctx => {
       updateDesignProject(id: $id, project: $project) { id }
     }`;
 
-    const updated = await APIClient.mutation(query, variables, { headers });
+    const updated = await APIService.client.mutation(query, variables, { headers });
     ctx.body = { message: 'Updated project successfully.', data: updated };
     ctx.status = 201;
   } catch (err) {
@@ -56,7 +56,7 @@ export const deleteProject = async ctx => {
       deleteDesignProject(id: $id) { id }
     }`;
 
-    const deleted = await APIClient.mutation(query, variables, { headers });
+    const deleted = await APIService.client.mutation(query, variables, { headers });
     ctx.body = { message: 'Deleted project successfully.', data: deleted };
     ctx.status = 200;
   } catch (err) {
