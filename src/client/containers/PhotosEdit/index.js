@@ -101,10 +101,12 @@ class PhotoEdit extends Component {
     const { photo, dispatch, router } = this.props;
     const sure = confirm('Are you sure you want to delete?'); // eslint-disable-line no-undef
 
+    const headers = { Authorization: this.props.token };
+
     if (sure) {
       this.setState({ deleting: true });
 
-      deleteJSON(`/photos/${photo.id}`, { photo })
+      deleteJSON(`/photos/${photo.id}`, { photo }, { headers })
         .then(() => {
           this.setState({
             deleting: false

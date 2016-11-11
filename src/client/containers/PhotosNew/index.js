@@ -50,7 +50,9 @@ export class PhotosNew extends Component {
       slug: slugify(tagName)
     };
 
-    postJSON('/tags', tag)
+    const headers = { Authorization: this.props.token };
+
+    postJSON('/tags', tag, { headers })
       .then(() => {
         // Refresh the tags list
         this.props.dispatch(actions.getAllTags());
@@ -103,7 +105,9 @@ export class PhotosNew extends Component {
       formData.append(`${file}[tags]`, tags);
     }
 
-    postForm('/photos', formData, { headers: { Authorization: this.props.token } })
+    const headers = { Authorization: this.props.token };
+
+    postForm('/photos', formData, { headers })
       .then(() => {
         this.setState({
           formFiles: [],
