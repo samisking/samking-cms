@@ -1,10 +1,10 @@
 /* eslint no-param-reassign: "off" */
-import { GraphClient, makeHeaders } from '../services/api';
+import { APIClient } from '../services/api';
 import PublishService from '../services/publish';
 
 export const createPhotos = async ctx => {
   const API_TOKEN = ctx.state.API_TOKEN;
-  const headers = makeHeaders(API_TOKEN);
+  const headers = { Authorization: API_TOKEN };
   const { files, body } = ctx.req;
 
   try {
@@ -12,13 +12,11 @@ export const createPhotos = async ctx => {
 
     const postAllPhotos = photos.map(photo => {
       const variables = { photo };
-      const query = `{
-        mutation ($photo: Photo) {
-          createPhoto(photo: $photo) { id }
-        }
+      const query = `mutation ($photo: PhotoInput) {
+        createPhoto(photo: $photo) { id }
       }`;
 
-      return GraphClient.mutation(query, variables, headers);
+      return APIClient.mutation(query, variables, { headers });
     });
 
     const created = await Promise.all(postAllPhotos);
@@ -31,19 +29,17 @@ export const createPhotos = async ctx => {
 
 export const updatePhoto = async ctx => {
   const API_TOKEN = ctx.state.API_TOKEN;
-  const headers = makeHeaders(API_TOKEN);
+  const headers = { Authorization: API_TOKEN };
   const photo = ctx.request.body;
   const id = parseInt(ctx.params.id, 10);
 
   try {
     const variables = { id, photo };
-    const query = `{
-      mutation ($id: Int, $photo: Photo) {
-        updatePhoto(id: $id, photo: $photo) { id }
-      }
+    const query = `mutation ($id: Int, $photo: PhotoInput) {
+      updatePhoto(id: $id, photo: $photo) { id }
     }`;
 
-    const updated = await GraphClient.mutation(query, variables, headers);
+    const updated = await APIClient.mutation(query, variables, { headers });
     ctx.body = { message: 'Updated photo successfully.', data: updated };
     ctx.status = 201;
   } catch (err) {
@@ -53,18 +49,16 @@ export const updatePhoto = async ctx => {
 
 export const deletePhoto = async ctx => {
   const API_TOKEN = ctx.state.API_TOKEN;
-  const headers = makeHeaders(API_TOKEN);
+  const headers = { Authorization: API_TOKEN };
   const id = parseInt(ctx.params.id, 10);
 
   try {
     const variables = { id };
-    const query = `{
-      mutation ($id: Int) {
-        deletePhoto(id: $id) { id }
-      }
+    const query = `mutation ($id: Int) {
+      deletePhoto(id: $id) { id }
     }`;
 
-    const deleted = await GraphClient.mutation(query, variables, headers);
+    const deleted = await APIClient.mutation(query, variables, { headers });
     ctx.body = { message: 'Deleted photo successfully.', data: deleted };
     ctx.status = 200;
   } catch (err) {

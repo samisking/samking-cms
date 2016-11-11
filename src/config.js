@@ -6,7 +6,7 @@ const config = {
   JWT_SECRET: process.env.JWT_SECRET || 'super secret cms key',
   USER_NAME: process.env.USER_NAME || 'admin',
   USER_PASS: process.env.USER_PASS || 'pass',
-  API_URL: process.env.API_PORT || 'http://localhost:3002',
+  API_URL: process.env.API_URL || 'http://localhost:3002',
   API_USER_NAME: process.env.API_USER_NAME || 'admin',
   API_USER_PASS: process.env.API_USER_PASS || 'pass',
   S3: {

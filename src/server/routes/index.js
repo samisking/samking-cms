@@ -9,7 +9,7 @@ import * as design from './design';
 import defaultRoute from './default';
 import AuthService from '../services/auth';
 import authMiddleware, { authRequired } from '../middleware/auth';
-import APIMiddleware from '../middleware/api';
+import { APIMiddleware } from '../middleware/api';
 import { errorMiddleware } from '../middleware/error';
 
 const router = new KoaRouter();
@@ -30,7 +30,7 @@ router.use(authMiddleware);
 
 router.get('*', async ctx => defaultRoute(ctx));
 
-// CMS routes
+// Public CMS routes
 router.post('/login', bodyParser(), async ctx => {
   const { username, password } = ctx.request.body;
 
@@ -56,17 +56,25 @@ router.post('/verify-login', bodyParser(), async ctx => {
   }
 });
 
+// Secure CMS routes that communicate with the API
 router.use(authRequired);
 router.use(APIMiddleware);
 
+// Create photos
 router.post('/photos', upload.array('images'), async (ctx) => photos.createPhotos(ctx));
+// Update a photo
 router.post('/photos/:id', bodyParser(), async (ctx) => photos.updatePhoto(ctx));
+// Delete a photo
 router.del('/photos/:id', async (ctx) => photos.deletePhoto(ctx));
 
+// Create a tag
 router.post('/tags', bodyParser(), async (ctx) => tags.createTag(ctx));
 
+// Create a design project
 router.post('/design', upload.array('images'), async (ctx) => design.createProject(ctx));
+// Update a design project
 router.post('/design/:id', upload.array('images'), async (ctx) => design.updateProject(ctx));
+// Delete a design project
 router.del('/design/:id', async (ctx) => design.deleteProject(ctx));
 
 export default router.routes();

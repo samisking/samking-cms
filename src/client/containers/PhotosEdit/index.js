@@ -55,7 +55,9 @@ class PhotoEdit extends Component {
       slug: slugify(tagName)
     };
 
-    postJSON('/tags', tag)
+    const headers = { Authorization: this.props.token };
+
+    postJSON('/tags', tag, { headers })
       .then(() => {
         // Refresh the tags list
         this.props.dispatch(actions.getAllTags());
@@ -77,10 +79,16 @@ class PhotoEdit extends Component {
 
     const updates = Object.assign({}, photo, {
       caption: formData.get('caption'),
-      tags: this.state.tags
+      tags: this.state.tags.map(t => t.slug)
     });
 
-    postJSON(`/photos/${photo.id}`, updates)
+    delete updates.id;
+
+    console.log('updates:', updates);
+
+    const headers = { Authorization: this.props.token };
+
+    postJSON(`/photos/${photo.id}`, updates, { headers })
       .then(() => {
         dispatch(actions.getAllPhotos());
       })
@@ -139,7 +147,7 @@ class PhotoEdit extends Component {
                 <TagsAutocomplete
                   className={styles.tagsAutocomplete}
                   data={tags}
-                  onSelect={(item) => this.onTagSelect(item)}
+                  onSelect={(tag) => this.onTagSelect(tag)}
                   onAddNew={(tag) => this.onAddNewTag(tag)}
                   onChange={() => {}}
                   unique
@@ -147,9 +155,9 @@ class PhotoEdit extends Component {
                 <div className={styles.tags}>
                   {this.state.tags.map(tag =>
                     <Tag
-                      key={tag}
-                      name={tag}
-                      onClick={e => this.onTagRemove(e, tag)}
+                      key={tag.slug}
+                      name={tag.slug}
+                      onClick={e => this.onTagRemove(e, tag.slug)}
                     />
                   )}
                 </div>
@@ -171,24 +179,23 @@ class PhotoEdit extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  const {
-    photos,
-    tags
-  } = state.api;
-
-  return {
-    photo: photos.find(p => p.id === parseInt(ownProps.params.id, 10)),
-    tags
-  };
-}
-
 PhotoEdit.propTypes = {
   dispatch: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired,
   router: PropTypes.object.isRequired,
   photo: PropTypes.object,
-  tags: PropTypes.array
+  tags: PropTypes.arrayOf(PropTypes.shape({
+    slug: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    photosCount: PropTypes.number
+  })),
+  token: PropTypes.string
 };
+
+const mapStateToProps = (state, ownProps) => ({
+  photo: state.api.photos.find(p => p.id === parseInt(ownProps.params.id, 10)),
+  tags: state.api.tags,
+  token: state.auth.token
+});
 
 export default withRouter(connect(mapStateToProps)(PhotoEdit));

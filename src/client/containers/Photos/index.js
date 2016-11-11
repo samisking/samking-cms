@@ -53,21 +53,17 @@ class Photos extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const {
-    photos
-  } = state.api;
-
-  return {
-    photos
-  };
-}
-
 Photos.propTypes = {
   children: PropTypes.node,
   dispatch: PropTypes.func,
   photos: PropTypes.array,
-  tags: PropTypes.array
+  tags: PropTypes.arrayOf(PropTypes.shape({
+    slug: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    photosCount: PropTypes.number
+  }))
 };
+
+const mapStateToProps = state => ({ photos: state.api.photos });
 
 export default connect(mapStateToProps)(Photos);

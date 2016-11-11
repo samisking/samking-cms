@@ -11,7 +11,7 @@ import Tag from '../../components/Tag';
 import Button from '../../components/Button';
 import styles from './PhotosNew.css';
 
-class PhotosNew extends Component {
+export class PhotosNew extends Component {
   constructor(props) {
     super(props);
 
@@ -103,7 +103,7 @@ class PhotosNew extends Component {
       formData.append(`${file}[tags]`, tags);
     }
 
-    postForm('/photos', formData)
+    postForm('/photos', formData, { headers: { Authorization: this.props.token } })
       .then(() => {
         this.setState({
           formFiles: [],
@@ -205,9 +205,9 @@ class PhotosNew extends Component {
             <div className={styles.previewTags}>
               {this.state.files[file.name].tags.map(tag =>
                 <Tag
-                  key={tag}
-                  name={tag}
-                  onClick={e => this.onTagRemove(e, tag, file.name)}
+                  key={tag.slug}
+                  name={tag.slug}
+                  onClick={e => this.onTagRemove(e, tag.slug, file.name)}
                 />
               )}
             </div>
@@ -260,19 +260,19 @@ class PhotosNew extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const {
-    tags
-  } = state.api;
-
-  return {
-    tags
-  };
-}
-
 PhotosNew.propTypes = {
   dispatch: PropTypes.func,
-  tags: PropTypes.array
+  tags: PropTypes.arrayOf(PropTypes.shape({
+    slug: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    photosCount: PropTypes.number
+  })),
+  token: PropTypes.string
 };
+
+const mapStateToProps = state => ({
+  tags: state.api.tags,
+  token: state.auth.token
+});
 
 export default connect(mapStateToProps)(PhotosNew);

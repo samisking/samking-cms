@@ -1,24 +1,22 @@
-import { getJSON } from 'sk-fetch-wrapper';
-import config from '../../../config';
-import * as types from './actionTypes';
+import { actionTypes, client, queries } from '.';
 
 export const getAllPhotos = () => (dispatch) => {
   dispatch({
-    type: types.GET_PHOTOS_REQUEST,
+    type: actionTypes.GET_PHOTOS_REQUEST,
     isFetching: true,
   });
 
-  return getJSON(`${config.API_URL}/api/photos`)
+  return client.query(queries.allPhotos)
     .then(res => {
       dispatch({
-        type: types.GET_PHOTOS_SUCCESS,
+        type: actionTypes.GET_PHOTOS_SUCCESS,
         isFetching: false,
-        photos: res,
+        photos: res.data.allPhotos,
       });
     })
     .catch(error => {
       dispatch({
-        type: types.GET_PHOTOS_FAILURE,
+        type: actionTypes.GET_PHOTOS_FAILURE,
         isFetching: false,
         error
       });
@@ -27,21 +25,21 @@ export const getAllPhotos = () => (dispatch) => {
 
 export const getAllTags = () => (dispatch) => {
   dispatch({
-    type: types.GET_TAGS_REQUEST,
+    type: actionTypes.GET_TAGS_REQUEST,
     isFetching: true,
   });
 
-  return getJSON(`${config.API_URL}/api/tags`)
+  return client.query(queries.allTags)
     .then(res => {
       dispatch({
-        type: types.GET_TAGS_SUCCESS,
+        type: actionTypes.GET_TAGS_SUCCESS,
         isFetching: false,
-        tags: res,
+        tags: res.data.allTags,
       });
     })
     .catch(error => {
       dispatch({
-        type: types.GET_TAGS_FAILURE,
+        type: actionTypes.GET_TAGS_FAILURE,
         isFetching: false,
         error
       });
@@ -50,21 +48,21 @@ export const getAllTags = () => (dispatch) => {
 
 export const getAllDesign = () => (dispatch) => {
   dispatch({
-    type: types.GET_DESIGN_REQUEST,
+    type: actionTypes.GET_DESIGN_REQUEST,
     isFetching: true,
   });
 
-  return getJSON(`${config.API_URL}/api/design`)
+  return client.query(queries.allDesignProjects)
     .then(res => {
       dispatch({
-        type: types.GET_DESIGN_SUCCESS,
+        type: actionTypes.GET_DESIGN_SUCCESS,
         isFetching: false,
-        design: res,
+        design: res.data.allDesignProjects,
       });
     })
     .catch(error => {
       dispatch({
-        type: types.GET_DESIGN_FAILURE,
+        type: actionTypes.GET_DESIGN_FAILURE,
         isFetching: false,
         error
       });
