@@ -27,7 +27,7 @@ export const updateProject = async ctx => {
   const API_TOKEN = ctx.state.API_TOKEN;
   const headers = { Authorization: API_TOKEN };
   const { files, body } = ctx.req;
-  const id = parseInt(ctx.params.id, 10);
+  const id = Number(ctx.params.id);
 
   try {
     const project = await PublishService.publishProject(files, body);
@@ -48,7 +48,7 @@ export const updateProject = async ctx => {
 export const deleteProject = async ctx => {
   const API_TOKEN = ctx.state.API_TOKEN;
   const headers = { Authorization: API_TOKEN };
-  const id = parseInt(ctx.params.id, 10);
+  const id = Number(ctx.params.id);
 
   try {
     const variables = { id };

@@ -41,7 +41,6 @@ const PublishService = {
 
         // Data for a single image to post to the API
         const imageData = {
-          type: 'photo',
           sizes,
           caption,
           tags,

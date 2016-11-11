@@ -8,9 +8,9 @@ export const createPhotos = async ctx => {
   const { files, body } = ctx.req;
 
   try {
-    const photos = await PublishService.publishPhotosPhotos(files, body);
+    const photos = await PublishService.publishPhotos(files, body);
 
-    const postAllPhotos = photos.map(photo => {
+    const publishAllPhotos = photos.map(photo => {
       const variables = { photo };
       const query = `mutation ($photo: PhotoInput) {
         createPhoto(photo: $photo) { id }
@@ -19,7 +19,7 @@ export const createPhotos = async ctx => {
       return APIService.client.mutation(query, variables, { headers });
     });
 
-    const created = await Promise.all(postAllPhotos);
+    const created = await Promise.all(publishAllPhotos);
     ctx.body = { message: 'Created photo(s) successfully.', data: created };
     ctx.status = 201;
   } catch (err) {
@@ -31,7 +31,7 @@ export const updatePhoto = async ctx => {
   const API_TOKEN = ctx.state.API_TOKEN;
   const headers = { Authorization: API_TOKEN };
   const photo = ctx.request.body;
-  const id = parseInt(ctx.params.id, 10);
+  const id = Number(ctx.params.id);
 
   try {
     const variables = { id, photo };
@@ -50,7 +50,7 @@ export const updatePhoto = async ctx => {
 export const deletePhoto = async ctx => {
   const API_TOKEN = ctx.state.API_TOKEN;
   const headers = { Authorization: API_TOKEN };
-  const id = parseInt(ctx.params.id, 10);
+  const id = Number(ctx.params.id);
 
   try {
     const variables = { id };
