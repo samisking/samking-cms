@@ -242,19 +242,23 @@ export class PhotosNew extends Component {
         <PageTitle title={'Add New Photos'} />
 
         <form onSubmit={this.onSubmit} encType="multipart/form-data">
-          <input
-            className={styles.fileInput}
-            type="file"
-            multiple="multiple"
-            accept="image/*"
-            onChange={this.onFileInputChange}
-          />
           <div className={styles.previews}>
             {Object.keys(files).map(filename =>
               <div key={filename} className={styles.previewContainer}>
                 {this.renderPreview(files[filename])}
               </div>
             )}
+          </div>
+          <div className={styles.addFiles}>
+            <input
+              className={styles.addInput}
+              id="files"
+              type="file"
+              multiple="multiple"
+              accept="image/*"
+              onChange={this.onFileInputChange}
+            />
+            <label className={styles.addButton} htmlFor="files">{'+'}</label>
           </div>
           {hasFiles &&
             <Button

@@ -1,14 +1,21 @@
-.fileInput {
-  width: 100%;
-  background: #f7f7f7;
-  padding: 20px;
-  font-size: 1em;
-  outline: none;
+.addFiles {
+  position: relative;
+}
 
-  &:hover {
-    background: #eeeeee;
-    cursor: pointer;
-  }
+.addInput {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.addButton {
+  composes: button_light from '../../components/Button/Button.css';
+  padding: 12px 20px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .errorText {
