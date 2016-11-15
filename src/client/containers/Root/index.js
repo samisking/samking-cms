@@ -24,7 +24,6 @@ class Root extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log(newProps);
     if (this.props.loggedIn && !newProps.loggedIn) {
       // If the user has logged out, or there was a verify error, go back to login
       this.props.router.push('/login');

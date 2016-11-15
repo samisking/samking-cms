@@ -16,9 +16,9 @@ export class PhotosNew extends Component {
     super(props);
 
     this.state = {
-      formFiles: [],
+      rawFiles: [],
       files: {},
-      order: [],
+      tmpUrls: {},
       loading: false,
       error: '',
       tagError: ''
@@ -67,12 +67,28 @@ export class PhotosNew extends Component {
 
   onFileInputChange(event) {
     event.preventDefault();
-    const files = event.target.files;
-    for (const file of files) {
+    const inputFiles = event.target.files;
+
+    const rawFiles = [...this.state.rawFiles];
+    const files = Object.assign({}, this.state.files);
+
+    for (const file of inputFiles) {
+      const uploadedFile = {
+        loading: true,
+        name: file.name,
+        tmpUrl: '',
+        tags: []
+      };
+
+      rawFiles.push(file);
+      files[file.name] = uploadedFile;
+
       this.setupReader(file);
     }
 
     this.setState({
+      rawFiles,
+      files,
       tagError: ''
     });
   }
@@ -83,7 +99,7 @@ export class PhotosNew extends Component {
     delete updatedFiles[filename];
 
     this.setState({
-      formFiles: this.state.formFiles.filter(f => f.name !== filename),
+      rawFiles: this.state.rawFiles.filter(f => f.name !== filename),
       files: updatedFiles,
       error: ''
     });
@@ -95,7 +111,7 @@ export class PhotosNew extends Component {
     const formData = new FormData(event.target); // eslint-disable-line no-undef
 
     // Add the actual files to the formData
-    for (const file of this.state.formFiles) {
+    for (const file of this.state.rawFiles) {
       formData.append('images', file);
     }
 
@@ -110,7 +126,7 @@ export class PhotosNew extends Component {
     postForm('/photos', formData, { headers })
       .then(() => {
         this.setState({
-          formFiles: [],
+          rawFiles: [],
           files: {},
           loading: false
         });
@@ -127,19 +143,15 @@ export class PhotosNew extends Component {
     const reader = new FileReader(); // eslint-disable-line no-undef
 
     reader.onloadend = () => {
-      const uploadedFile = {
-        url: reader.result,
-        name: file.name,
-        tags: []
-      };
-
       this.setState({
-        formFiles: [...this.state.formFiles, file],
         files: {
           ...this.state.files,
-          [file.name]: uploadedFile
-        },
-        order: [...this.state.order, file.name]
+          [file.name]: {
+            ...this.state.files[file.name],
+            loading: false,
+            tmpUrl: reader.result
+          }
+        }
       });
     };
 
@@ -148,11 +160,9 @@ export class PhotosNew extends Component {
 
   addTagToFile(tag, filename) {
     const stateFile = this.state.files[filename];
-    const withNewTag = Object.assign(
-      {},
-      stateFile,
-      { tags: [tag, ...stateFile.tags] }
-    );
+    const withNewTag = Object.assign({}, stateFile, {
+      tags: [tag, ...stateFile.tags]
+    });
 
     this.setState({
       files: {
@@ -186,7 +196,7 @@ export class PhotosNew extends Component {
           <div className={styles.previewImage}>
             <ImagePreview
               id={file.name}
-              url={file.url}
+              url={file.tmpUrl}
               onClick={this.onPreviewClick}
               removable
             />
@@ -222,8 +232,8 @@ export class PhotosNew extends Component {
   }
 
   render() {
-    const { files, formFiles, error } = this.state;
-    const hasFiles = formFiles.length > 0;
+    const { files, rawFiles, error } = this.state;
+    const hasFiles = rawFiles.length > 0;
     const hasError = error.length > 0 && hasFiles;
 
     return (
@@ -240,9 +250,9 @@ export class PhotosNew extends Component {
             onChange={this.onFileInputChange}
           />
           <div className={styles.previews}>
-            {Object.keys(files).map(file =>
-              <div key={file} className={styles.previewContainer}>
-                {this.renderPreview(files[file])}
+            {Object.keys(files).map(filename =>
+              <div key={filename} className={styles.previewContainer}>
+                {this.renderPreview(files[filename])}
               </div>
             )}
           </div>
