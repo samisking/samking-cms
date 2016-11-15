@@ -80,10 +80,13 @@ export class PhotosNew extends Component {
         tags: []
       };
 
-      rawFiles.push(file);
-      files[file.name] = uploadedFile;
+      const hasPhoto = rawFiles.find(f => f.name === file.name);
 
-      this.setupReader(file);
+      if (!hasPhoto) {
+        rawFiles.push(file);
+        files[file.name] = uploadedFile;
+        this.setupReader(file);
+      }
     }
 
     this.setState({
