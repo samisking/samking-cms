@@ -47,16 +47,9 @@ Root.propTypes = {
   token: PropTypes.string
 };
 
-function mapStateToProps(state) {
-  const {
-    loggedIn,
-    token
-  } = state.auth;
-
-  return {
-    loggedIn,
-    token
-  };
-}
+const mapStateToProps = (state) => ({
+  loggedIn: state.auth.loggedIn,
+  token: state.auth.token
+});
 
 export default withRouter(connect(mapStateToProps)(Root));

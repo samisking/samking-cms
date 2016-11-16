@@ -1,17 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import Link from 'react-router/lib/Link';
 import { postJSON, postForm } from 'sk-fetch-wrapper';
-import { slugify } from '../../data/helpers';
+import { slugify } from '../../utils';
 import { actions } from '../../data/api';
-import BackButton from '../../components/BackButton';
-import PageTitle from '../../components/PageTitle';
 import ImagePreview from '../../components/ImagePreview';
 import TagsAutocomplete from '../../components/TagsAutocomplete';
 import Tag from '../../components/Tag';
 import Button from '../../components/Button';
 import styles from './PhotosNew.css';
 
-export class PhotosNew extends Component {
+class PhotosNew extends Component {
   constructor(props) {
     super(props);
 
@@ -37,7 +36,7 @@ export class PhotosNew extends Component {
   }
 
   onTagSelect(tag, filename) {
-    this.addTagToFile(tag.slug, filename);
+    this.addTagToFile(tag, filename);
   }
 
   onTagRemove(event, tag, filename) {
@@ -56,7 +55,7 @@ export class PhotosNew extends Component {
       .then(() => {
         // Refresh the tags list
         this.props.dispatch(actions.getAllTags());
-        this.addTagToFile(tag.slug, filename);
+        this.addTagToFile(tag, filename);
       })
       .catch(err => {
         this.setState({
@@ -97,15 +96,19 @@ export class PhotosNew extends Component {
   }
 
   onPreviewClick(event, filename) {
-    // Remove the file from the upload queue
-    const updatedFiles = Object.assign({}, this.state.files);
-    delete updatedFiles[filename];
+    const isSure = confirm('Are you sure you want to remove this?'); // eslint-disable-line
 
-    this.setState({
-      rawFiles: this.state.rawFiles.filter(f => f.name !== filename),
-      files: updatedFiles,
-      error: ''
-    });
+    if (isSure) {
+      // Remove the file from the upload queue
+      const updatedFiles = Object.assign({}, this.state.files);
+      delete updatedFiles[filename];
+
+      this.setState({
+        rawFiles: this.state.rawFiles.filter(f => f.name !== filename),
+        files: updatedFiles,
+        error: ''
+      });
+    }
   }
 
   onSubmit(event) {
@@ -120,7 +123,7 @@ export class PhotosNew extends Component {
 
     // Add the tags to the formData
     for (const file of Object.keys(this.state.files)) {
-      const tags = this.state.files[file].tags.join(',');
+      const tags = this.state.files[file].tags.map(t => t.slug).join(',');
       formData.append(`${file}[tags]`, tags);
     }
 
@@ -133,6 +136,8 @@ export class PhotosNew extends Component {
           files: {},
           loading: false
         });
+
+        this.props.dispatch(actions.getAllPhotos());
       })
       .catch(err => {
         this.setState({
@@ -175,13 +180,11 @@ export class PhotosNew extends Component {
     });
   }
 
-  removeTagFromFile(tag, filename) {
+  removeTagFromFile(tagSlug, filename) {
     const stateFile = this.state.files[filename];
-    const withoutTag = Object.assign(
-      {},
-      stateFile,
-      { tags: stateFile.tags.filter(t => t !== tag) }
-    );
+    const withoutTag = Object.assign({}, stateFile, {
+      tags: stateFile.tags.filter(t => t.slug !== tagSlug)
+    });
 
     this.setState({
       files: {
@@ -193,41 +196,38 @@ export class PhotosNew extends Component {
 
   renderPreview(file) {
     return (
-      <div>
+      <div className={styles.preview}>
         <p className={styles.previewName}>{file.name}</p>
-        <div className={styles.preview}>
-          <div className={styles.previewImage}>
-            <ImagePreview
-              id={file.name}
-              url={file.tmpUrl}
-              onClick={this.onPreviewClick}
-              removable
-            />
-          </div>
-          <div className={styles.previewData}>
-            <textarea
-              className={styles.previewCaption}
-              type="text"
-              placeholder="Caption"
-              name={`${file.name}[caption]`}
-            />
-            <TagsAutocomplete
-              className={styles.previewTagsAutocomplete}
-              data={this.props.tags}
-              onSelect={(item) => this.onTagSelect(item, file.name)}
-              onAddNew={(tag) => this.onAddNewTag(tag, file.name)}
-              onChange={() => {}}
-              unique
-            />
-            <div className={styles.previewTags}>
-              {this.state.files[file.name].tags.map(tag =>
-                <Tag
-                  key={tag.slug}
-                  name={tag.slug}
-                  onClick={e => this.onTagRemove(e, tag.slug, file.name)}
-                />
-              )}
-            </div>
+        <div className={styles.previewImage}>
+          <ImagePreview
+            id={file.name}
+            url={file.tmpUrl}
+            onClick={this.onPreviewClick}
+            removable
+          />
+        </div>
+        <div className={styles.previewData}>
+          <input
+            className={styles.previewCaption}
+            type="text"
+            placeholder="Caption"
+            name={`${file.name}[caption]`}
+          />
+          <TagsAutocomplete
+            data={this.props.tags}
+            onSelect={(tag) => this.onTagSelect(tag, file.name)}
+            onAddNew={(tagName) => this.onAddNewTag(tagName, file.name)}
+            onChange={() => {}}
+            unique
+          />
+          <div className={styles.previewTags}>
+            {this.state.files[file.name].tags.map(tag =>
+              <Tag
+                key={tag.slug}
+                name={tag.name}
+                onClick={e => this.onTagRemove(e, tag.slug, file.name)}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -238,20 +238,26 @@ export class PhotosNew extends Component {
     const { files, rawFiles, error } = this.state;
     const hasFiles = rawFiles.length > 0;
     const hasError = error.length > 0 && hasFiles;
+    const filesKeys = Object.keys(files);
 
     return (
       <div>
-        <BackButton url={'/photos'} />
-        <PageTitle title={'Add New Photos'} />
+        <div className={styles.toolbar}>
+          <Link to={'/photos'} className={styles.toolbarButton}>
+            {'← Back'}
+          </Link>
+        </div>
 
         <form onSubmit={this.onSubmit} encType="multipart/form-data">
-          <div className={styles.previews}>
-            {Object.keys(files).map(filename =>
-              <div key={filename} className={styles.previewContainer}>
-                {this.renderPreview(files[filename])}
-              </div>
-            )}
-          </div>
+          {filesKeys.length > 0 &&
+            <div className={styles.previews}>
+              {filesKeys.map(filename =>
+                <div key={filename} className={styles.previewContainer}>
+                  {this.renderPreview(files[filename])}
+                </div>
+              )}
+            </div>
+          }
           <div className={styles.addFiles}>
             <input
               className={styles.addInput}
@@ -269,7 +275,7 @@ export class PhotosNew extends Component {
               loading={this.state.loading}
               error={hasError}
             >
-              Upload
+              {'Upload'}
             </Button>
           }
           {hasError &&

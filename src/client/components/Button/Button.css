@@ -1,6 +1,6 @@
 .button {
-  display: inline-block;
-  min-width: 240px;
+  display: block;
+  width: 100%;
   padding: 12px 20px;
   border: none;
   background-color: #000000;
@@ -16,10 +16,6 @@
   &:hover {
     background-color: #333333;
     border-color: #333333;
-  }
-
-  & + & {
-    margin-left: 20px;
   }
 }
 

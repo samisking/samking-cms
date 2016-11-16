@@ -1,7 +1,19 @@
 import chalk from 'chalk';
 
+const formatTime = (timeStr) => {
+  if (Number(timeStr) < 10) return `0${timeStr}`;
+  return timeStr;
+};
+
 export const log = (prefix, message) => {
-  console.log(`${chalk.bold(`» ${prefix}`)} ${message}`);
+  const start = new Date();
+  const time = [
+    formatTime(start.getHours()),
+    formatTime(start.getMinutes()),
+    formatTime(start.getSeconds()),
+    start.getMilliseconds()
+  ].join(':');
+  console.log(`${chalk.bold(`[${time}] » ${prefix}`)} ${message}`);
 };
 
 const colorCodes = {

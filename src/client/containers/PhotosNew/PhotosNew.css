@@ -1,3 +1,16 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.toolbarButton {
+  display: inline-block;
+  margin: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
 .addFiles {
   position: relative;
 }
@@ -14,12 +27,13 @@
 .addButton {
   composes: button_light from '../../components/Button/Button.css';
   padding: 12px 20px;
+  margin-bottom: 20px;
   font-weight: 600;
   text-align: center;
 }
 
 .errorText {
-  margin: 20px 0 0;
+  margin: 10px 0 0;
   color: #ff0000;
 }
 
@@ -31,44 +45,35 @@
 }
 
 .previewContainer {
-  /*width: calc(50% - 30px);*/
   width: 100%;
-  margin-top: 40px;
+
+  & + & {
+    margin-top: 30px;
+  }
 }
 
 .preview {
-  display: flex;
-  justify-content: space-between;
 }
 
 .previewName {
   margin: 0 0 10px;
 }
 
-.previewImage,
-.previewData {
-  width: calc(50% - 10px);
+.previewImage {
+  margin-bottom: 20px;
 }
 
 .previewData {
-  display: flex;
-  flex-direction: column;
 }
 
 .previewCaption {
   composes: input from '../../GlobalStyle.css';
-  align-items: flex-start;
-  flex: 1;
   margin-bottom: 20px;
 }
 
-.previewTagsAutocomplete {
-  margin-bottom: 5px;
-}
-
 .previewTags {
-  composes: input from '../../GlobalStyle.css';
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
+  background: #f7f7f7;
+  min-height: 3em;
+  padding: 10px;
+  padding-bottom: 0;
 }

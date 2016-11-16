@@ -5,18 +5,28 @@
 html, body {
   padding: 0;
   margin: 0;
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
+  background: #ffffff;
   font-family: -apple-system, ".SFNSText-Regular", "San Francisco", sans-serif;
   font-size: 16px;
   line-height: 1.4;
-  background: #000000;
+  color: #111111;
 }
 
 img {
   max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: #111111;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .input {
@@ -24,17 +34,15 @@ img {
   font-size: 16px;
   font-weight: 200;
   line-height: 1.4;
-  padding: 10px 15px;
+  padding: 10px;
   margin: 0;
-  border: 1px solid #eeeeee;
+  border: none;
+  border-bottom: 1px solid #f7f7f7;
+  background: #f7f7f7;
   resize: none;
   outline: none;
 
-  &:hover {
-    border-color: #cccccc;
-  }
-
-  &:focus {
-    border-color: #111111;
+  &:hover, &:focus {
+    border-color: #eeeeee;
   }
 }

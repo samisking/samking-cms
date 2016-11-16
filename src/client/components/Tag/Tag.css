@@ -3,11 +3,11 @@
   margin: 0 10px 10px 0;
   padding: 5px 10px;
   font-size: 14px;
-  background-color: #f7f7f7;
+  background-color: #fff;
   cursor: pointer;
 
   &:hover {
-    background-color: #111;
+    background-color: #ff0000;
     color: #fff;
   }
 }

@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import withRouter from 'react-router/lib/withRouter';
+import Link from 'react-router/lib/Link';
 import { postJSON, deleteJSON } from 'sk-fetch-wrapper';
-import { slugify } from '../../data/helpers';
+import { slugify } from '../../utils';
 import { actions } from '../../data/api';
-import BackButton from '../../components/BackButton';
-import PageTitle from '../../components/PageTitle';
 import TagsAutocomplete from '../../components/TagsAutocomplete';
 import Tag from '../../components/Tag';
 import Button from '../../components/Button';
@@ -32,20 +31,20 @@ class PhotoEdit extends Component {
     if (newProps.photo) {
       this.setState({
         caption: newProps.photo.caption || '',
-        tags: newProps.photo.tags ? [...new Set(this.state.tags.concat(newProps.photo.tags))] : []
+        tags: newProps.photo.tags ? [...newProps.photo.tags] : []
       });
     }
   }
 
-  onTagRemove(event, tag) {
+  onTagRemove(event, tagSlug) {
     this.setState({
-      tags: this.state.tags.filter(t => t !== tag)
+      tags: this.state.tags.filter(t => t.slug !== tagSlug)
     });
   }
 
   onTagSelect(tag) {
     this.setState({
-      tags: [...this.state.tags, tag.slug]
+      tags: [...this.state.tags, tag]
     });
   }
 
@@ -62,7 +61,7 @@ class PhotoEdit extends Component {
         // Refresh the tags list
         this.props.dispatch(actions.getAllTags());
         this.setState({
-          tags: [...this.state.tags, tag.slug]
+          tags: [...this.state.tags, tag]
         });
       })
       .catch(err => {
@@ -125,21 +124,28 @@ class PhotoEdit extends Component {
   }
 
   render() {
-    const { params, photo, tags } = this.props;
+    const { photo, tags } = this.props;
+    const imageRatio = photo ? (photo.sizes.large.height / photo.sizes.large.width) * 100 : 0;
 
     return (
       <div>
-        <BackButton url={'/photos'} />
-        <PageTitle title={`Edit ${params.id}`} />
+        <div className={styles.toolbar}>
+          <Link to={'/photos'} className={styles.toolbarButton}>
+            {'← Back'}
+          </Link>
+
+          <p className={styles.toolbarButton}>{`ID: ${photo ? photo.id : '00'}`}</p>
+        </div>
+
         {photo &&
           <form onSubmit={this.onSubmit}>
             <div className={styles.container}>
-              <div className={styles.image}>
+              <div className={styles.image} style={{ paddingBottom: `${imageRatio}%` }}>
                 <img src={photo.sizes.medium.url} alt={photo.id} />
               </div>
 
               <div className={styles.data}>
-                <textarea
+                <input
                   className={styles.caption}
                   type="text"
                   placeholder="Caption"
@@ -150,7 +156,7 @@ class PhotoEdit extends Component {
                   className={styles.tagsAutocomplete}
                   data={tags}
                   onSelect={(tag) => this.onTagSelect(tag)}
-                  onAddNew={(tag) => this.onAddNewTag(tag)}
+                  onAddNew={(tagName) => this.onAddNewTag(tagName)}
                   onChange={() => {}}
                   unique
                 />
@@ -158,16 +164,22 @@ class PhotoEdit extends Component {
                   {this.state.tags.map(tag =>
                     <Tag
                       key={tag.slug}
-                      name={tag.slug}
+                      name={tag.name}
                       onClick={e => this.onTagRemove(e, tag.slug)}
                     />
                   )}
                 </div>
               </div>
             </div>
-            <Button type="submit">Save</Button>
+            <Button
+              type="submit"
+              className={styles.buttonSave}
+            >
+              {'Update Photo'}
+            </Button>
             <Button
               type="button"
+              className={styles.buttonDelete}
               loading={this.state.deleting}
               onClick={this.onDelete}
               danger
@@ -195,7 +207,7 @@ PhotoEdit.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  photo: state.api.photos.find(p => p.id === parseInt(ownProps.params.id, 10)),
+  photo: state.api.photos.find(p => p.id === Number(ownProps.params.id)),
   tags: state.api.tags,
   token: state.auth.token
 });

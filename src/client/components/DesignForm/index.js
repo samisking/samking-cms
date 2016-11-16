@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { postForm, deleteJSON } from 'sk-fetch-wrapper';
-import { slugify } from '../../data/helpers';
+import { slugify } from '../../utils';
 import ImagePreview from '../../components/ImagePreview';
 import Button from '../Button';
 import styles from './DesignForm.css';

@@ -1,0 +1,39 @@
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 60px;
+  z-index: 3;
+}
+
+.header {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vh;
+  padding: 20px 30px;
+  transform: translate3d(-50%, -50%, 0) rotate(-90deg);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.navigation {
+  display: flex;
+}
+
+.navigationItem {
+  & + & {
+    margin-left: 1em;
+  }
+}
+
+.navigationLink {
+  opacity: 0.3;
+}
+
+.navigationLink_active {
+  composes: navigationLink;
+  text-decoration: underline;
+}

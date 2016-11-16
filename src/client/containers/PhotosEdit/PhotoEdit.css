@@ -1,31 +1,44 @@
-.container {
+.toolbar {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.toolbarButton {
+  display: inline-block;
+  margin: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.container {
   margin-bottom: 20px;
 }
 
 .image {
-  width: 60%;
+  background: #f7f7f7;
+  margin-bottom: 20px;
+  height: 0;
 }
 
 .data {
-  width: calc(40% - 40px);
 }
 
 .caption {
   composes: input from '../../GlobalStyle.css';
-  min-height: 100px;
-  align-items: flex-start;
   margin-bottom: 20px;
 }
 
 .tagsAutocomplete {
-  margin-bottom: 5px;
 }
 
 .tags {
-  composes: input from '../../GlobalStyle.css';
-  min-height: 100px;
-  padding: 15px;
-  overflow-y: auto;
+  background: #f7f7f7;
+  min-height: 3em;
+  padding: 10px;
+  padding-bottom: 0;
+}
+
+.buttonSave {
+  margin-bottom: 10px;
 }

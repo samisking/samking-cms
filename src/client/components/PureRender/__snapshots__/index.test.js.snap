@@ -1,0 +1,6 @@
+exports[`<PureRender /> renders correctly 1`] = `
+<div
+  className="foo">
+  0
+</div>
+`;

@@ -1,0 +1,35 @@
+exports[`<Header /> renders correctly 1`] = `
+<div
+  className="wrapper">
+  <div
+    className="header">
+    <a
+      className="brand"
+      onClick={[Function]}
+      style={Object {}}>
+      Sam King
+    </a>
+    <div
+      className="navigation">
+      <div
+        className="navigationItem">
+        <a
+          className="navigationLink_active"
+          onClick={[Function]}
+          style={Object {}}>
+          Photos
+        </a>
+      </div>
+      <div
+        className="navigationItem">
+        <a
+          className="navigationLink"
+          onClick={[Function]}
+          style={Object {}}>
+          Design
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -22,7 +22,7 @@ const List = ({ data, selected, onSelect }) =>
   <ul className={styles.autocompleteList}>
     {data.map((item, index) =>
       <ListItem
-        key={item.id}
+        key={item.name}
         name={item.name}
         index={index}
         selected={selected}

@@ -1,5 +1,5 @@
 export const allPhotos = `{
-  allPhotos {
+  allPhotos(sortBy: "-id") {
     id
     caption
     tags { slug name photosCount }
@@ -13,7 +13,7 @@ export const allPhotos = `{
 }`;
 
 export const allTags = `{
-  allTags {
+  allTags(withEmpty: true) {
     slug
     name
     photosCount

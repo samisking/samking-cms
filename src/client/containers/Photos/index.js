@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Link from 'react-router/lib/Link';
 import { actions } from '../../data/api';
-import PageTitle from '../../components/PageTitle';
 import ImagePreview from '../../components/ImagePreview';
 import styles from './Photos.css';
 
@@ -28,28 +27,29 @@ class Photos extends Component {
       ));
     }
 
-    let component;
+    let component = null;
+
     if (this.props.children) {
       component = this.props.children;
     } else {
       component = (
         <div>
-          <PageTitle title={'All Photos'} />
+          <div className={styles.toolbar}>
+            <Link to="/photos/new" className={styles.toolbarButton}>
+              {'Add New'}
+            </Link>
+            <p className={styles.toolbarButton}>
+              {'Filter'}
+            </p>
+          </div>
           <div className={styles.grid}>
-            <div className={styles.addNewContainer}>
-              <Link to="/photos/new" className={styles.addNewButton}>
-                <span className={styles.addNewContent}>{'+'}</span>
-              </Link>
-            </div>
             {photos}
           </div>
         </div>
       );
     }
 
-    return (
-      <div>{component}</div>
-    );
+    return component;
   }
 }
 

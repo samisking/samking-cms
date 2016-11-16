@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Link from 'react-router/lib/Link';
 import styles from './Button.css';
 
-const Button = ({ children, type, url, loading, danger, disabled, error, onClick }) => {
+const Button = ({ className, children, type, url, loading, danger, disabled, error, onClick }) => {
   let classes;
   if (disabled) {
     classes = styles.button_disabled;
@@ -15,6 +15,8 @@ const Button = ({ children, type, url, loading, danger, disabled, error, onClick
   } else {
     classes = styles.button;
   }
+
+  classes = `${classes} ${className}`;
 
   const clickHandler = (event) => {
     if (onClick) {
@@ -40,6 +42,7 @@ const Button = ({ children, type, url, loading, danger, disabled, error, onClick
 };
 
 Button.propTypes = {
+  className: PropTypes.string,
   children: PropTypes.node.isRequired,
   url: PropTypes.string,
   type: PropTypes.oneOf(['submit', 'button', 'link']),

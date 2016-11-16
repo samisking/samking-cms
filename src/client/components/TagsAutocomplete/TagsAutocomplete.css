@@ -14,10 +14,21 @@
   z-index: 1;
   margin: 0;
   padding: 0;
-  border: 1px solid #111111;
-  border-top: none;
-  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  /*border-top: none;*/
+  background: #f7f7f7;
   list-style: none;
+
+  /*&:before {
+    content: '';
+    position: absolute;
+    top: -1em;
+    left: 1em;
+    width: 0.5em;
+    height: 0.5em;
+    border: 0.5em solid transparent;
+    border-bottom-color: #fff;
+  }*/
 }
 
 .listItem {
@@ -26,5 +37,6 @@
 
 .listItem_active {
   composes: listItem;
-  background: #f7f7f7;
+  background: #111;
+  color: #fff;
 }
