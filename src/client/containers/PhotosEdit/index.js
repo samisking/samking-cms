@@ -140,11 +140,13 @@ class PhotoEdit extends Component {
         {photo &&
           <form onSubmit={this.onSubmit}>
             <div className={styles.container}>
-              <div className={styles.image} style={{ paddingBottom: `${imageRatio}%` }}>
-                <img src={photo.sizes.medium.url} alt={photo.id} />
+              <div className={styles.imageContainer}>
+                <div className={styles.image} style={{ paddingBottom: `${imageRatio}%` }}>
+                  <img src={photo.sizes.medium.url} alt={photo.id} />
+                </div>
               </div>
 
-              <div className={styles.data}>
+              <div className={styles.dataEntry}>
                 <input
                   className={styles.caption}
                   type="text"
@@ -169,23 +171,23 @@ class PhotoEdit extends Component {
                     />
                   )}
                 </div>
+                <Button
+                  type="submit"
+                  className={styles.buttonSave}
+                >
+                  {'Update Photo'}
+                </Button>
+                <Button
+                  type="button"
+                  className={styles.buttonDelete}
+                  loading={this.state.deleting}
+                  onClick={this.onDelete}
+                  danger
+                >
+                  {'Delete Photo'}
+                </Button>
               </div>
             </div>
-            <Button
-              type="submit"
-              className={styles.buttonSave}
-            >
-              {'Update Photo'}
-            </Button>
-            <Button
-              type="button"
-              className={styles.buttonDelete}
-              loading={this.state.deleting}
-              onClick={this.onDelete}
-              danger
-            >
-              {'Delete Photo'}
-            </Button>
           </form>
         }
       </div>
