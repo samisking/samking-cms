@@ -1,5 +1,5 @@
 import os from 'os';
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 import sharp from 'sharp';
 import path from 'path';
 import { ExifImage } from 'exif';
@@ -14,7 +14,7 @@ const ImageService = {
         const { exif } = exifData;
 
         const dateArr = exif.DateTimeOriginal.replace(' ', ':').split(':');
-        const captureTime = new Date(...dateArr.map(i => parseInt(i, 10)));
+        const captureTime = new Date(...dateArr.map(i => Number(i))).getTime();
 
         resolve({
           captureTime,
