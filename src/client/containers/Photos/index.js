@@ -20,7 +20,7 @@ class Photos extends Component {
             <ImagePreview
               id={photo.id}
               url={photo.sizes.small.url}
-              cover
+              contain
             />
           </Link>
         </div>

@@ -22,11 +22,15 @@ const ImagePreview = ({ id, url, onClick, removable, contain }) => {
   return (
     <div
       onClick={clickHandler}
-      className={classNames}
-      style={{
-        backgroundImage: `url(${url})`
-      }}
-    />
+      className={styles.imageContainer}
+    >
+      <div
+        className={classNames}
+        style={{
+          backgroundImage: `url(${url})`
+        }}
+      />
+    </div>
   );
 };
 

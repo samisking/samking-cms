@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import withRouter from 'react-router/lib/withRouter';
 import { actions } from '../../data/auth';
-import '../../GlobalStyle.css';
+import '../../css/Global.css';
 
 class Root extends Component {
   componentWillMount() {

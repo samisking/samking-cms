@@ -1,3 +1,5 @@
+@value cBP, dBP from '../../css/Breakpoints.css';
+
 .grid {
   display: flex;
   justify-content: space-between;
@@ -14,6 +16,14 @@
   /* (100% / columns) - ((gutter * (columns - 1)) / columns ) */
   width: calc((100% / 2) - (20px * 1 / 2));
   margin-bottom: 20px;
+
+  @media cBP {
+    width: calc((100% / 3) - (20px * 2 / 2));
+  }
+
+  @media dBP {
+    width: calc((100% / 4) - (20px * 3 / 2));
+  }
 }
 
 .toolbar {

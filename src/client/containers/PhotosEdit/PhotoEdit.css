@@ -25,7 +25,7 @@
 }
 
 .caption {
-  composes: input from '../../GlobalStyle.css';
+  composes: input from '../../css/Global.css';
   margin-bottom: 20px;
 }
 
