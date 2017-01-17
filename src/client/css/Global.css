@@ -11,7 +11,7 @@ html, body {
 body {
   background: #ffffff;
   font-family: -apple-system, ".SFNSText-Regular", "San Francisco", sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.4;
   color: #111111;
 }
@@ -31,7 +31,7 @@ a {
 
 .input {
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 200;
   line-height: 1.4;
   padding: 10px;

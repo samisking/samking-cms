@@ -203,6 +203,7 @@ class PhotosNew extends Component {
             id={file.name}
             url={file.tmpUrl}
             onClick={this.onPreviewClick}
+            contain
             removable
           />
         </div>
