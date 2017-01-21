@@ -95,7 +95,9 @@ class DesignForm extends Component {
 
     formData.append('existingImages', JSON.stringify(this.state.images));
 
-    postForm(this.props.endpoint, formData)
+    const headers = { Authorization: this.props.token };
+
+    postForm(this.props.endpoint, formData, { headers })
       .then(response => {
         this.setState({
           loading: false,
@@ -298,6 +300,7 @@ class DesignForm extends Component {
 DesignForm.propTypes = {
   project: PropTypes.object,
   endpoint: PropTypes.string.isRequired,
+  token: PropTypes.string,
   buttonText: PropTypes.string,
   onSuccess: PropTypes.func.isRequired,
   onDelete: PropTypes.func

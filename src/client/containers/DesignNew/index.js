@@ -31,6 +31,7 @@ class DesignNew extends Component {
         <DesignForm
           project={this.props.project}
           endpoint={'/design'}
+          token={this.props.token}
           onSuccess={this.onSuccess}
           onError={this.onError}
         />
@@ -42,7 +43,8 @@ class DesignNew extends Component {
 DesignNew.propTypes = {
   dispatch: PropTypes.func,
   router: PropTypes.object,
-  project: PropTypes.object
+  project: PropTypes.object,
+  token: PropTypes.string
 };
 
 DesignNew.defaultProps = {
@@ -56,4 +58,8 @@ DesignNew.defaultProps = {
   }
 };
 
-export default withRouter(connect()(DesignNew));
+const mapStateToProps = state => ({
+  token: state.auth.token
+});
+
+export default withRouter(connect(mapStateToProps)(DesignNew));

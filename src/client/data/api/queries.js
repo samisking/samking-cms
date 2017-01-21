@@ -35,8 +35,9 @@ export const allDesignProjects = `{
     subtitle
     date
     excerpt
-    coverImage
     content
+    raw
+    coverImage
     images {
       id
       sizes {

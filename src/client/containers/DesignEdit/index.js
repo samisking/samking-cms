@@ -35,6 +35,7 @@ class DesignEdit extends Component {
         <DesignForm
           project={this.props.project}
           endpoint={`/design/${this.props.project.id}`}
+          token={this.props.token}
           buttonText={'Update Project'}
           onSuccess={this.onSuccess}
           onDelete={this.onDelete}
@@ -45,18 +46,11 @@ class DesignEdit extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  const { design } = state.api;
-
-  return {
-    project: design.find(p => p.slug === ownProps.params.slug)
-  };
-}
-
 DesignEdit.propTypes = {
   dispatch: PropTypes.func,
   router: PropTypes.object,
-  project: PropTypes.object
+  project: PropTypes.object,
+  token: PropTypes.string
 };
 
 DesignEdit.defaultProps = {
@@ -68,6 +62,15 @@ DesignEdit.defaultProps = {
     raw: '',
     images: []
   }
+};
+
+const mapStateToProps = (state, ownProps) => {
+  const { design } = state.api;
+
+  return {
+    project: design.find(p => p.slug === ownProps.params.slug),
+    token: state.auth.token
+  };
 };
 
 export default withRouter(connect(mapStateToProps)(DesignEdit));
